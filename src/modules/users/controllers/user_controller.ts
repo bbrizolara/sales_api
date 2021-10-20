@@ -5,6 +5,7 @@ import ShowUserService from "../services/show_user_service";
 
 class UserController {
   public async index(req: Request, res: Response) {
+    console.log("id logueado: " + req.user.id);
     const users = await ListUsersService.execute();
     return res.status(200).json(users);
   }
