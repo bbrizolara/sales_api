@@ -23,17 +23,6 @@ usersRouter.post(
   userController.create
 );
 
-usersRouter.get(
-  "/:id",
-  isAuthenticated,
-  celebrate({
-    [Segments.PARAMS]: {
-      id: Joi.string().uuid().required(),
-    },
-  }),
-  userController.show
-);
-
 usersRouter.patch(
   "/avatar",
   isAuthenticated,
