@@ -43,7 +43,7 @@ class ProductsController {
   public async delete(req: Request, res: Response) {
     const { id } = req.params;
     const product = await DeleteProductService.execute({ id });
-    return res.status(200);
+    return res.status(204);
   }
 }
 
