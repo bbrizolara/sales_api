@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from "typeorm";
+import { Exclude } from "class-transformer";
 
 @Entity("products")
 class Product {
@@ -28,6 +29,7 @@ class Product {
   @CreateDateColumn()
   created_at: Date;
 
+  @Exclude()
   @UpdateDateColumn()
   updated_at: Date;
 }

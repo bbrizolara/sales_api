@@ -4,17 +4,18 @@ import DeleteProductService from "../services/delete_product_service";
 import ListProductsService from "../services/list_products_service";
 import ShowProductService from "../services/show_product_service";
 import UpdateProductService from "../services/update_product_service";
+import { classToClass } from "class-transformer";
 
 class ProductsController {
   public async index(req: Request, res: Response) {
     const products = await ListProductsService.execute();
-    return res.status(200).json(products);
+    return res.status(200).json(classToClass(products));
   }
 
   public async show(req: Request, res: Response) {
     const { id } = req.params;
     const product = await ShowProductService.execute({ id });
-    return res.status(200).json(product);
+    return res.status(200).json(classToClass(product));
   }
 
   public async create(req: Request, res: Response) {
@@ -24,7 +25,7 @@ class ProductsController {
       price,
       quantity,
     });
-    return res.status(201).json(product);
+    return res.status(201).json(classToClass(product));
   }
 
   public async update(req: Request, res: Response) {
@@ -36,7 +37,7 @@ class ProductsController {
       price,
       quantity,
     });
-    return res.status(200).json(product);
+    return res.status(200).json(classToClass(product));
   }
 
   public async delete(req: Request, res: Response) {
