@@ -1,12 +1,12 @@
-import AppError from "@shared/errors/app_error";
+import IPaginate from "@shared/utils/pagination";
 import { getCustomRepository } from "typeorm";
 import { ProductRepository } from "../typeorm/repositories/products_repository";
 
 class ListProductsService {
   public static async execute() {
     const productsRepository = getCustomRepository(ProductRepository);
-    const products = await productsRepository.find();
-    return products;
+    const products = await productsRepository.createQueryBuilder().paginate();
+    return products as IPaginate;
   }
 }
 
