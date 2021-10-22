@@ -7,7 +7,6 @@ import UpdateProductService from "../services/update_product_service";
 
 class ProductsController {
   public async index(req: Request, res: Response) {
-    console.log("llega aca");
     const products = await ListProductsService.execute();
     return res.status(200).json(products);
   }
