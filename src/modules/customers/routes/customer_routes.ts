@@ -2,8 +2,11 @@ import { Router } from "express";
 import customersController from "../controllers/customers_controller";
 import { celebrate, Joi, Segments, errors } from "celebrate";
 import isAuthenticated from "@shared/http/middlewares/is_authenticated";
+import rateLimiter from "@shared/http/middlewares/rate_limiter";
 
 const customersRouter = Router();
+
+customersRouter.use(rateLimiter);
 
 customersRouter.get("/", isAuthenticated, customersController.index);
 

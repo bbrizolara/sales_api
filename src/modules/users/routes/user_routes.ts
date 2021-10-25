@@ -5,8 +5,11 @@ import userAvatarController from "../controllers/user_avatar_controller";
 import isAuthenticated from "@shared/http/middlewares/is_authenticated";
 import multer from "multer";
 import uploadConfig from "@config/upload";
+import rateLimiter from "@shared/http/middlewares/rate_limiter";
 
 const usersRouter = Router();
+
+usersRouter.use(rateLimiter);
 const upload = multer(uploadConfig);
 
 usersRouter.get("/", isAuthenticated, userController.index);
