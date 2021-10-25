@@ -2,8 +2,11 @@ import { Router } from "express";
 import productsController from "../controllers/product_controller";
 import { celebrate, Joi, Segments, errors } from "celebrate";
 import isAuthenticated from "@shared/http/middlewares/is_authenticated";
+import rateLimiter from "@shared/http/middlewares/rate_limiter";
 
 const productsRouter = Router();
+
+productsRouter.use(rateLimiter);
 
 productsRouter.get("/", isAuthenticated, productsController.index);
 

@@ -1,8 +1,11 @@
 import { Router } from "express";
 import { celebrate, Joi, Segments } from "celebrate";
 import ordersController from "../controllers/orders_controller";
+import rateLimiter from "@shared/http/middlewares/rate_limiter";
 
 const ordersRouter = Router();
+
+ordersRouter.use(rateLimiter);
 
 ordersRouter.post(
   "/",

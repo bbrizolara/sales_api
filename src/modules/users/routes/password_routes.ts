@@ -2,8 +2,11 @@ import { Router } from "express";
 import { celebrate, Joi, Segments } from "celebrate";
 import forgotPasswordController from "../controllers/forgot_password_controller";
 import resetPasswordController from "../controllers/reset_password_controller";
+import rateLimiter from "@shared/http/middlewares/rate_limiter";
 
 const passwordRouter = Router();
+
+passwordRouter.use(rateLimiter);
 
 passwordRouter.post(
   "/forgot",

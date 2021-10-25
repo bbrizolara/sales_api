@@ -1,8 +1,11 @@
 import { Router } from "express";
 import { celebrate, Joi, Segments } from "celebrate";
 import sessionsController from "../controllers/sessions_controller";
+import rateLimiter from "@shared/http/middlewares/rate_limiter";
 
 const sessionsRouter = Router();
+
+sessionsRouter.use(rateLimiter);
 
 sessionsRouter.post(
   "/",
