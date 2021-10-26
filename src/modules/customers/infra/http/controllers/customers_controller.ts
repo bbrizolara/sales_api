@@ -5,17 +5,18 @@ import DeleteCustomerService from "../../../services/delete_customer_service";
 import ListCustomersService from "../../../services/list_customers_service";
 import ShowCustomerService from "../../../services/show_customer_service";
 import UpdateCustomerService from "../../../services/update_customer_service";
-import { CustomerRepository } from "../../typeorm/repositories/customer_repository";
 
 class CustomerController {
   public async index(req: Request, res: Response) {
-    const customers = await ListCustomersService.execute();
+    const listCustomers = container.resolve(ListCustomersService);
+    const customers = await listCustomers.execute();
     return res.status(200).json(customers);
   }
 
   public async show(req: Request, res: Response) {
     const { id } = req.params;
-    const customer = await ShowCustomerService.execute({ id });
+    const showCustomer = container.resolve(ShowCustomerService);
+    const customer = await showCustomer.execute({ id });
     return res.status(200).json(customer);
   }
 
@@ -32,7 +33,8 @@ class CustomerController {
   public async update(req: Request, res: Response) {
     const { id } = req.params;
     const { name, email } = req.body;
-    const customer = await UpdateCustomerService.execute({
+    const updateCustomer = container.resolve(UpdateCustomerService);
+    const customer = await updateCustomer.execute({
       id,
       name,
       email,
@@ -42,7 +44,8 @@ class CustomerController {
 
   public async delete(req: Request, res: Response) {
     const { id } = req.params;
-    await DeleteCustomerService.execute({ id });
+    const deleteCustomer = container.resolve(DeleteCustomerService);
+    await deleteCustomer.execute({ id });
     return res.status(204).json();
   }
 }

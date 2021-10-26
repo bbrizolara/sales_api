@@ -6,7 +6,8 @@ import { container } from "tsyringe";
 
 class UserController {
   public async index(req: Request, res: Response) {
-    const users = await ListUsersService.execute();
+    const listUsers = container.resolve(ListUsersService);
+    const users = await listUsers.execute();
     return res.status(200).json(classToClass(users));
   }
 
