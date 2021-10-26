@@ -1,7 +1,7 @@
 import AppError from "@shared/errors/app_error";
 import { getCustomRepository } from "typeorm";
-import { UserRepository } from "../typeorm/repositories/users_repository";
-import { UserTokenRepository } from "../typeorm/repositories/user_tokens_repository";
+import { UserRepository } from "../infra/typeorm/repositories/users_repository";
+import { UserTokenRepository } from "../infra/typeorm/repositories/user_tokens_repository";
 import { isAfter, addHours } from "date-fns";
 import { hash } from "bcryptjs";
 

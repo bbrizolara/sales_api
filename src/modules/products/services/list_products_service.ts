@@ -1,6 +1,6 @@
 import IPaginate from "@shared/utils/pagination";
 import { getCustomRepository } from "typeorm";
-import { ProductRepository } from "../typeorm/repositories/products_repository";
+import { ProductRepository } from "../infra/typeorm/repositories/products_repository";
 
 class ListProductsService {
   public static async execute() {

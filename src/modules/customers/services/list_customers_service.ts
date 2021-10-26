@@ -1,11 +1,20 @@
 import IPaginate from "@shared/utils/pagination";
-import { getCustomRepository } from "typeorm";
-import { CustomerRepository } from "../typeorm/repositories/customer_repository";
+import { inject, injectable } from "tsyringe";
+import { iCustomersRepository } from "../domain/repositories/iCustomersRepository";
 
+@injectable()
 class ListCustomersService {
-  public static async execute() {
-    const customersRepository = getCustomRepository(CustomerRepository);
-    const customers = await customersRepository.createQueryBuilder().paginate();
+  private customerRepository: iCustomersRepository;
+
+  constructor(
+    @inject("CustomerRepository")
+    customerRepository: iCustomersRepository
+  ) {
+    this.customerRepository = customerRepository;
+  }
+
+  public async execute() {
+    const customers = await this.customerRepository.findAllPaginate();
     return customers as IPaginate;
   }
 }

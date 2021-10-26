@@ -1,9 +1,9 @@
-import { CustomerRepository } from "@modules/customers/typeorm/repositories/customer_repository";
-import Product from "@modules/products/typeorm/entities/product";
-import { ProductRepository } from "@modules/products/typeorm/repositories/products_repository";
+import { CustomerRepository } from "@modules/customers/infra/typeorm/repositories/customer_repository";
+import Product from "@modules/products/infra/typeorm/entities/product";
+import { ProductRepository } from "@modules/products/infra/typeorm/repositories/products_repository";
 import AppError from "@shared/errors/app_error";
 import { getCustomRepository } from "typeorm";
-import { OrderRepository } from "../typeorm/repositories/orders_repository";
+import { OrderRepository } from "../infra/typeorm/repositories/orders_repository";
 
 interface IRequest {
   customerId: string;

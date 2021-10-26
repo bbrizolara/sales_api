@@ -1,29 +1,29 @@
 import AppError from "@shared/errors/app_error";
-import { getCustomRepository } from "typeorm";
-import { CustomerRepository } from "../typeorm/repositories/customer_repository";
+import { inject, injectable } from "tsyringe";
+import { IUpdateCustomer } from "../domain/models/iUpdateCustomer";
+import { iCustomersRepository } from "../domain/repositories/iCustomersRepository";
+import { CustomerBaseService } from "./customer_base_services";
 
-interface IRequest {
-  id: string;
-  name: string;
-  email: string;
-}
+@injectable()
+class UpdateCustomerService extends CustomerBaseService {
+  constructor(customerRepository: iCustomersRepository) {
+    super(customerRepository);
+  }
 
-class UpdateCustomerService {
-  public static async execute({ id, name, email }: IRequest) {
-    const customerRepository = getCustomRepository(CustomerRepository);
-    const customer = await customerRepository.findById(id);
+  public async execute({ id, name, email }: IUpdateCustomer) {
+    const customer = await this.customerRepository.findById(id);
     if (!customer) {
       throw new AppError("Customer not found", 404);
     }
 
-    const emailExists = await customerRepository.findByEmail(email);
+    const emailExists = await this.customerRepository.findByEmail(email);
     if (emailExists && email !== customer.email) {
       throw new AppError("Email is already in use");
     }
 
     customer.name = name;
     customer.email = email;
-    await customerRepository.save(customer);
+    await this.customerRepository.save(customer);
     return customer;
   }
 }

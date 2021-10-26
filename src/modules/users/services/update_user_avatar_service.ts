@@ -3,15 +3,11 @@ import path from "path";
 import uploadConfig from "@config/upload";
 import fs from "fs";
 import { getCustomRepository } from "typeorm";
-import { UserRepository } from "../typeorm/repositories/users_repository";
-
-interface IRequest {
-  userId: string;
-  avatarFileName: string;
-}
+import { UserRepository } from "../infra/typeorm/repositories/users_repository";
+import { IUpdateUserAvatar } from "../domain/models/iUpdateUserAvatar";
 
 class UpdateUserAvatarService {
-  public static async execute({ userId, avatarFileName }: IRequest) {
+  public static async execute({ userId, avatarFileName }: IUpdateUserAvatar) {
     const usersRepository = getCustomRepository(UserRepository);
     const user = await usersRepository.findById(userId);
     if (!user) {
