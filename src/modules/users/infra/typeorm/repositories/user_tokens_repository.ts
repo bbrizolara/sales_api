@@ -1,37 +1,27 @@
-import { EntityRepository, Repository } from "typeorm";
+import { IUsersTokenRepository } from "@modules/users/domain/repositories/iUsersTokenRepository";
+import { getRepository, Repository } from "typeorm";
 import UserToken from "../entities/user_token";
 
-@EntityRepository(UserToken)
-export class UserTokenRepository extends Repository<UserToken> {
-  public async findByUserId(user_id: string) {
-    return await this.findOne({
-      where: {
-        user_id,
-      },
-    });
+export class UserTokenRepository implements IUsersTokenRepository {
+  private ormRepository: Repository<UserToken>;
+
+  constructor() {
+    this.ormRepository = getRepository(UserToken);
   }
 
   public async findByToken(token: string) {
-    return await this.findOne({
+    return await this.ormRepository.findOne({
       where: {
         token,
       },
     });
   }
 
-  public async findById(id: string) {
-    return await this.findOne({
-      where: {
-        id,
-      },
-    });
-  }
-
   public async generate(user_id: string) {
-    const userToken = this.create({
+    const userToken = this.ormRepository.create({
       user_id,
     });
-    await this.save(userToken);
+    await this.ormRepository.save(userToken);
     return userToken;
   }
 }

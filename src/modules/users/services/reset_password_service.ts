@@ -1,26 +1,34 @@
 import AppError from "@shared/errors/app_error";
-import { getCustomRepository } from "typeorm";
-import { UserRepository } from "../infra/typeorm/repositories/users_repository";
-import { UserTokenRepository } from "../infra/typeorm/repositories/user_tokens_repository";
 import { isAfter, addHours } from "date-fns";
 import { hash } from "bcryptjs";
+import { IResetPassword } from "../domain/models/iResetPassword";
+import { inject, injectable } from "tsyringe";
+import { IUsersRepository } from "../domain/repositories/iUsersRepository";
+import { IUsersTokenRepository } from "../domain/repositories/iUsersTokenRepository";
 
-interface IRequest {
-  token: string;
-  password: string;
-}
-
+@injectable()
 class ResetPasswordService {
-  public static async execute({ token, password }: IRequest) {
-    const userTokenRepository = getCustomRepository(UserTokenRepository);
-    const userRepository = getCustomRepository(UserRepository);
+  private usersRepository: IUsersRepository;
+  private usersTokenRepository: IUsersTokenRepository;
 
-    const userToken = await userTokenRepository.findByToken(token);
+  constructor(
+    @inject("UsersRepository")
+    usersRepository: IUsersRepository,
+
+    @inject("UserTokenRepository")
+    usersTokenRepository: IUsersTokenRepository
+  ) {
+    this.usersRepository = usersRepository;
+    this.usersTokenRepository = usersTokenRepository;
+  }
+
+  public async execute({ token, password }: IResetPassword) {
+    const userToken = await this.usersTokenRepository.findByToken(token);
     if (!userToken) {
       throw new AppError("User token not found", 404);
     }
 
-    const user = await userRepository.findById(userToken.user_id);
+    const user = await this.usersRepository.findById(userToken.user_id);
     if (!user) {
       throw new AppError("User not found", 404);
     }
@@ -31,7 +39,7 @@ class ResetPasswordService {
     }
     const hashedPassword = await hash(password, 8);
     user.password = hashedPassword;
-    await userRepository.save(user);
+    await this.usersRepository.save(user);
     return user;
   }
 }

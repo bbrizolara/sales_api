@@ -1,4 +1,4 @@
 export interface IUpdateUserAvatar {
-  userId: string;
+  id: string;
   avatarFileName: string;
 }

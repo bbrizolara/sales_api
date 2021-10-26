@@ -1,6 +1,8 @@
 import { ICreateUser } from "@modules/users/domain/models/iCreateUser";
+import { IUpdateUserAvatar } from "@modules/users/domain/models/iUpdateUserAvatar";
 import { IUser } from "@modules/users/domain/models/iUser";
 import { IUsersRepository } from "@modules/users/domain/repositories/iUsersRepository";
+import IPaginate from "@shared/utils/pagination";
 import { getRepository, Repository } from "typeorm";
 import User from "../entities/user";
 
@@ -35,6 +37,11 @@ export class UserRepository implements IUsersRepository {
     });
   }
 
+  public async findAllPaginate() {
+    const users = await this.ormRepository.createQueryBuilder().paginate();
+    return users as IPaginate;
+  }
+
   public async create({ name, email, password }: ICreateUser) {
     const user = this.ormRepository.create({
       name,
@@ -48,5 +55,9 @@ export class UserRepository implements IUsersRepository {
   public async save(user: IUser) {
     await this.ormRepository.save(user);
     return user;
+  }
+
+  public async remove(user: IUser) {
+    await this.ormRepository.save(user);
   }
 }

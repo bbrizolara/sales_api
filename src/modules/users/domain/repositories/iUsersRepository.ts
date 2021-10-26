@@ -1,6 +1,5 @@
 import IPaginate from "@shared/utils/pagination";
 import { ICreateUser } from "../models/iCreateUser";
-import { IUpdateUserAvatar } from "../models/iUpdateUserAvatar";
 import { IUser } from "../models/iUser";
 
 export interface IUsersRepository {
@@ -11,5 +10,4 @@ export interface IUsersRepository {
   create(data: ICreateUser): Promise<IUser>;
   save(customer: IUser): Promise<IUser>;
   remove(customer: IUser): Promise<void>;
-  updateAvatar(data: IUpdateUserAvatar): Promise<IUser>;
 }

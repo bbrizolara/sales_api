@@ -1,24 +1,22 @@
 import AppError from "@shared/errors/app_error";
 import { compare, hash } from "bcryptjs";
-import { getCustomRepository } from "typeorm";
-import { UserRepository } from "../infra/typeorm/repositories/users_repository";
+import { inject, injectable } from "tsyringe";
+import { IUpdateUser } from "../domain/models/iUpdateUser";
+import { IUsersRepository } from "../domain/repositories/iUsersRepository";
 
-interface IRequest {
-  userId: string;
-  name: string;
-  password?: string;
-  oldPassword?: string;
-}
-
+@injectable()
 class UpdateUserService {
-  public static async execute({
-    userId,
-    name,
-    password,
-    oldPassword,
-  }: IRequest) {
-    const usersRepository = getCustomRepository(UserRepository);
-    const user = await usersRepository.findById(userId);
+  private usersRepository: IUsersRepository;
+
+  constructor(
+    @inject("UserRepository")
+    usersRepository: IUsersRepository
+  ) {
+    this.usersRepository = usersRepository;
+  }
+
+  public async execute({ id, name, password, oldPassword }: IUpdateUser) {
+    const user = await this.usersRepository.findById(id);
     if (!user) {
       throw new AppError("User not found", 404);
     }
@@ -37,7 +35,7 @@ class UpdateUserService {
     }
 
     user.name = name;
-    await usersRepository.save(user);
+    await this.usersRepository.save(user);
     return user;
   }
 }
